@@ -41,7 +41,7 @@ npm run dev
 4. Running Tests:
 
 ```bash
-npm test
+npm run test
 ```
 
 
