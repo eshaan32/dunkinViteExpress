@@ -14,7 +14,7 @@ This project is a full-stack assessment for Method, the fintech startup. The pro
 1. Clone the repository:
 
 ```bash
-git clone 
+git clone https://github.com/eshaan32/dunkinViteExpress.git DunkinDashboard
 ```
 
 2. Install dependencies:
@@ -55,6 +55,7 @@ The application should now be running on \`http://localhost:5173 with the Expres
 - Tailwind
 - Method
 - CSS
+- Cron Job Integration
 
 ## Project Structure
 
