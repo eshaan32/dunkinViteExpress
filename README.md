@@ -45,7 +45,7 @@ npm test
 ```
 
 
-The application should now be running on \`http://localhost:5173\` with the Express server on \`http://localhost:3000\`.
+The application should now be running on `http://localhost:5173` with the Express server on \`http://localhost:3000\`.
 
 ## Technologies
 
