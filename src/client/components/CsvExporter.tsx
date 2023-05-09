@@ -37,7 +37,6 @@ const CsvExporter = ({ sDate }: CsvExporterProp) => {
     fetch(`http://localhost:3000/payments/csv/${type}/${sDate}`)
       .then((data) => data.blob())
       .then((data) => {
-        // console.log(data)
         // download the file named with the type grabbed above plus the date of upload selected
         fileDownload(data, `${csvType}_${sDate}.csv`)
       })

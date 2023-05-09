@@ -25,7 +25,6 @@ const PaymentStatusPoll = ({ status, setPaymentStart, sDate }: PaymentPollProp) 
   //invoke the custom useInterval hook to begin the polling fetch requests for remaining pending payments
   useInterval(async () => {
     // make polling request
-    // console.log('payment poll interval')
 
     // check status. this will return before the fetch call for the oddly timed second the callback is invoked before the interval is stopped
     if (!status) return
@@ -34,12 +33,10 @@ const PaymentStatusPoll = ({ status, setPaymentStart, sDate }: PaymentPollProp) 
     const amount = await fetch(`http://localhost:3000/reporting/pendingPayments/${sDate}`)
     // await the resolution of the promise
     const amountPending = await amount.json()
-    console.log('🚀 ~ file: PaymentStatusPoll.tsx:37 ~ useInterval ~ amountPending:', amountPending)
 
     // set numPayments with the amount to be rendered in the polling message
 
     setNumPayments(amountPending.length)
-    console.log(amountPending.length)
 
     // check that there are no more pending payments => stop poll
     if (amountPending.length === 0) {

@@ -83,7 +83,6 @@ export default class MethodApiClient {
       })
       return newAchAccount
     } catch (err: any) {
-      // console.log(err.sub_type)
       return err.sub_type
     }
   }
@@ -104,7 +103,6 @@ export default class MethodApiClient {
       return payment
       
     } catch (err: any) {
-      // console.log(err.sub_type)
       // an error has occured. 
 
       // return null and handle on server side
@@ -114,15 +112,8 @@ export default class MethodApiClient {
 
   async findMchId(plaidId: string) {
     // this middleware will check method api for merchants possessing the specified plaidId. will return false if none found
-    try {
-      // console.log('plaidId input', plaidId)
       const result = await this.method.merchants.list({'provider_id.plaid': plaidId})
-      // console.log('🚀 ~ file: MethodApiClient.ts:189 ~ MethodApiClient ~ findMchId ~ result:', result[0].mch_id ? result[0].mch_id : 'no mchId found')
   
       return result !== undefined ? result[0].mch_id : null
-      
-    } catch (err: any) {
-      // console.log(err.sub_type)
-    }
   }
 }

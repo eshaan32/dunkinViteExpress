@@ -58,7 +58,4 @@ describe('should render the fileUpload component with all text and buttons', () 
     expect(setFile).toHaveBeenCalledTimes(1)
 
   });
-  test('Should do something', () => {
-    console.log('hoi')
-  })
 });

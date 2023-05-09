@@ -6,7 +6,6 @@ export const validateRow = (obj: any) => {
       !obj.row.hasOwnProperty("Payor") ||
       !obj.row.hasOwnProperty("Payee") ||
       !obj.row.hasOwnProperty("Amount")) {
-    // console.log('basic val failed')
     return false;
   }
 
@@ -24,7 +23,6 @@ export const validateRow = (obj: any) => {
       typeof emp.LastName._text !== "string" ||
       typeof emp.DOB._text !== "string" ||
       typeof emp.PhoneNumber._text !== "string") {
-        // console.log('employee property failed')
     return false;
   }
 
@@ -51,7 +49,6 @@ export const validateRow = (obj: any) => {
       typeof payor.Address.City._text !== "string" ||
       typeof payor.Address.State._text !== "string" ||
       typeof payor.Address.Zip._text !== "string") {
-        // console.log('payor property failed')
     return false;
   }
 
@@ -61,14 +58,14 @@ export const validateRow = (obj: any) => {
       !payee.hasOwnProperty("LoanAccountNumber") ||
       typeof payee.PlaidId._text !== "string" ||
       typeof payee.LoanAccountNumber._text !== "string") {
-        // console.log('payee property failed')
+
     return false;
   }
 
   // Check the formatting of the Amount property
   const amount = obj.row.Amount;
   if (typeof amount._text !== "string" ) {
-    // console.log('amount property failed')
+
     return false;
   }
 

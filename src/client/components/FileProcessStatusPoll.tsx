@@ -36,7 +36,6 @@ const FileProcessStatusPoll = ({ sDate, setIsLoading, isLoading }: FileStatusPro
     // check that the uploadStatus on the processing upload has been switched to true, meaning all entities and accounts are done processing
     if (uploadStatus === 'true') {
       // switch the isLoading 
-      console.log('file done processing')
       setIsLoading(() => !isLoading)
       delay = null
     }

@@ -21,7 +21,6 @@ reportingRouter.get('/corps', mongoController.getCorps, (req: Request, res: Resp
  * Route to get list of branches with payments and corp ids used to build out reporting table body
 **/
 reportingRouter.get('/branches/:date?', mongoController.getPayments, mongoController.getCorps, mongoController.getBranches, (req: Request, res: Response) => {
-  // console.log(req.params)
   res.status(200).send(res.locals.branches)
 })
 

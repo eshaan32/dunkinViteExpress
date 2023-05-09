@@ -52,14 +52,11 @@ const methodController = {
 
         if(newEntity.status === 'active') {
           // creation success
-          console.log(newEntity)
           // update the ID on the employee document
           employee.entId = newEntity.id
           await employee.save()
         }
-      } else {
-        console.log('entity exists')
-      }
+      } 
 
       // CREATING THE BUSINESS ENTITY
       if(business.entId === undefined) {
@@ -73,9 +70,7 @@ const methodController = {
           business.entId = newBusEntity.id
           await business.save()
         }
-      } else {
-        console.log('bus entity exists')
-      }
+      } 
     }
 
     return next()
@@ -167,7 +162,6 @@ const methodController = {
         // check there is no error, update employee document with accound Id and save
         if(newAccount.error === null) {
           // account created successfully
-          console.log(newAccount)
           employee.accId = newAccount.id
           await employee.save()
         } else {
@@ -202,7 +196,6 @@ const methodController = {
 
         // check for no errors
         if (newAcct.error === null) {
-          console.log(newAcct)
           // ACH account created
           corporation.payorId = newAcct.id
           await corporation.save()

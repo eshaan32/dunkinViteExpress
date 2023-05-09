@@ -104,7 +104,6 @@ const App = () => {
             return response.json()
           })
           .then((response) => {
-            // console.log(response)
             if (response.err) {
               // there was an unauthorized upload. stop the poll
               setIsLoading(isLoading => !isLoading)
@@ -123,7 +122,6 @@ const App = () => {
           })
       })
     } else {
-      // console.log('not an xml')
       // switch the warning color to true, changing text color to red to show an erronous input
       setWarningColor(true)
       setMessage('Please ensure the upload is of type XML')

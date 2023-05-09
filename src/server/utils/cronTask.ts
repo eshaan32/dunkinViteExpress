@@ -13,8 +13,7 @@ export const startSchedule = async (date: string, uploadId: string) => {
     fetch(`http://localhost:3000/payments/move/${date}`)
       .then((data) => data.json())
       .then((data) => {
-        console.log('data from inside-cron fetch', data)
-        // console.log(data.message)
+        console.log(data.message)
       })
   }, {name: uploadId, scheduled: false})
   

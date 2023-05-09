@@ -240,7 +240,6 @@ const paymentController = {
       }
       // if the employee doesnt exist in the map, add it as a key with initial value of an empty array, this is too push our employees 
       if(!mapOfEmployees[el.row.Employee.DunkinId._text]) {
-        if(el.row.Employee.FirstName === 'tara') console.log('found tara')
         mapOfEmployees[el.row.Employee.DunkinId._text] = el
         mapOfEmployees[el.row.Employee.DunkinId._text].row.Amount._text = formatPaymentAmount(el.row.Amount._text)
       } else {
@@ -438,7 +437,6 @@ const paymentController = {
    * @returns makes payments through Method Api, saving status to payment document in MongoDb
   **/
   processPayments: async (req: Request, res: Response, next: NextFunction) => {
-    // console.log('entered process Payments')
     const {date} = req.params
     const fDate = formatDate(date)
 
@@ -449,22 +447,18 @@ const paymentController = {
     // initialize a methodAPiClient
     const api = new MethodApiClient(process.env.METHOD_DEV_KEY, Environments.dev)
     
-    // define the rate limit
-    const limit = RateLimit(8)
     
     
     // fetch a list of the 500 payments
     const listOfPendingPayments = await Payment.find({$and: [{uploadId: uploadKey}, {status: 'pending'}]}).limit(500)
+    
     res.send({message: `Starting movement of ${listOfPendingPayments.length} payments`})
-    console.log('🚀 ~ file: paymentsController.ts:455 ~ processPayments: ~ listOfPendingPayments:', listOfPendingPayments, listOfPendingPayments.length)
-    console.log('🚀 ~ file: paymentsController.ts:456 ~ processPayments: ~ listOfPendingPayments length:', listOfPendingPayments.length)
 
     // escape clause
     if(listOfPendingPayments.length === 0) return
-    const start = Date.now()
+
     for (const payment of listOfPendingPayments) {
       // do awaits here
-      // await limit()
 
       // payment is stored in variable payment
       const amountPaid = payment.amountPaid as number
@@ -491,7 +485,6 @@ const paymentController = {
 
       // interface with method api to make payment
       const newPayment = await api.makePayment(empAccId, corpAccId, amountPaid)
-      console.log('🚀 ~ file: paymentsController.ts:481 ~ processPayments: ~ newPayment:', newPayment)
 
       // check for successful payment creation
       if(newPayment?.status === 'pending') {
@@ -536,8 +529,6 @@ const paymentController = {
         await erroredPayment.save()
       }
     }
-    const end = Date.now()
-    console.log('TIME in SECONDS: ', (start - end) / 1000)
     return next()
   },
 }

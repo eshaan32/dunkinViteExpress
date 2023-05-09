@@ -30,15 +30,12 @@ const mongoController = {
   updateUpload: async (req: Request, res: Response, next: NextFunction) => {
     try {
       const { uploadKey } = res.locals
-      console.log('process finished')
 
       const [upload] = await Upload.find({uploadId: uploadKey})
-      // console.log('🚀 ~ file: mongoController.ts:27 ~ updateUpload: ~ upload:', upload)
 
       upload.processingFinished = true
 
       await upload.save()
-      // console.log('🚀 ~ file: mongoController.ts:32 ~ updateUpload: ~ upload:', upload)
       
       return next()
     } catch(err) {
@@ -60,7 +57,6 @@ const mongoController = {
     try {
       // fetch employee
       const listOfEmployees = await Employee.find({})
-      // console.log('🚀 ~ file: mongoController.ts:24 ~ getEmployees: ~ listOfEmployees:', listOfEmployees)
 
       // save the list of employees to local storage
       res.locals.listOfEmployees = listOfEmployees
@@ -86,26 +82,24 @@ const mongoController = {
       let uploadKey
       
       if(!req.params.date) {
-        // console.log('no request param, this is an onload')
         const uploadDoc: any = await Upload.find({}).sort({uploadDate: -1})
-        // console.log('🚀 ~ file: mongoController.ts:74 ~ getPayments: ~ uploadDoc:', uploadDoc)
+
         if(uploadDoc.length === 0) return res.send(200)
         uploadKey = uploadDoc[0].uploadId
-        // console.log('🚀 ~ file: mongoController.ts:75 ~ getPayments: ~ uploadKey:', uploadKey)
+
       } else {
         // get the req param
         const { date } = req.params
         // get the uniqueUpload Key 
-        // console.log('date: ', date)
         const uploadDoc: any = await Upload.find({uploadDate: date })
-        // console.log('🚀 ~ file: mongoController.ts:84 ~ getPayments: ~ uploadDoc:', uploadDoc)
+
         uploadKey = uploadDoc[0].uploadId 
-        // console.log('🚀 ~ file: mongoController.ts:83 ~ getPayments: ~ uploadKey:', uploadKey)
+
       }
       
       // fetch the payments
       const listOfPayments = await Payment.find({uploadId: uploadKey})
-      // console.log('🚀 ~ file: mongoController.ts:87 ~ getPayments: ~ listOfPayments:', listOfPayments)
+
 
       res.locals.date = req.params.date
       res.locals.paymentList = listOfPayments
@@ -128,9 +122,7 @@ const mongoController = {
   **/
   getBranches: async (req: Request, res: Response, next: NextFunction) => { 
    // this middleware will fetch all payments based on the passed in uniqueId, essentially a date filter
-   try {
-    // console.log('fetching list of branches ')
-    
+   try {    
     // get list of payments from local storage
     const { paymentList, corps } = res.locals
 
@@ -164,7 +156,6 @@ const mongoController = {
 
     // for each branch calculate the sum of payments
     for(const branch in branches) {
-      // console.log('branch for summing', branches[branch])
       const sumOfPayments = Object.values(branches[branch].payments).reduce((a: any, b: any) => a + b, 0)
       branches[branch].totalPayment = sumOfPayments
     }
@@ -261,49 +252,51 @@ const mongoController = {
         return next()
       } else {
 
+        // find upload associated with payment processing to fetch the uploadId and consequently Cron Job
         const [upload] = await Upload.find({uploadDate: date})
-        // console.log('🚀 ~ file: mongoController.ts:201 ~ getPendingPayments: ~ upload:', upload)
+
         const uploadKey = upload.uploadId
-        // console.log('🚀 ~ file: mongoController.ts:202 ~ getPendingPayments: ~ uploadKey:', uploadKey)
   
-        const listOfPendingPayments = await Payment.find({$and: [{uploadId: uploadKey}, {status: 'pending'}]})
-        // console.log('🚀 ~ file: mongoController.ts:215 ~ getPendingPayments: ~ listOfPendingPayments:', listOfPendingPayments)
-  
+        // get a count of the remaining pending payments
         const countOfPending = await Payment.countDocuments({$and: [{uploadId: uploadKey}, {status: 'pending'}]})
-        console.log('🚀 ~ file: mongoController.ts:273 ~ getPendingPayments: ~ countOfPending:', countOfPending)
-  
+
+        // find the Cron job associated with the payment
         const runningTask = await Cron.find({$and: [{status: 'on'}, {batchId: uploadKey}]})
-        console.log('🚀 ~ file: mongoController.ts:276 ~ getPendingPayments: ~ runningTask:', runningTask)
-        // console.log(cron.getTasks())
+        
         if(runningTask) {
-          // console.log(listOfPendingPayments.length)
+
+          // fetch upload id from runninTask as that is directly tied to cronTasks map of tasks
           const uploadId = runningTask[0].batchId
     
+          // check if num pending payments is 0 => payments done processing
           if(countOfPending === 0) {
-            // all payments from the batch are uploaded
-            console.log('in here')
+            // all payments from the batch are processed
+
+            // reassign the paymentsFinished flag to true and save
             upload.paymentsFinished = true
             await upload.save()
   
-            // console.log('no pending payments')
+
+            // fetch the list of cron tasks to find the one running to stop
             const listOfTasks = cron.getTasks()
             const paymentProcessor: any = listOfTasks.get(uploadId)
-            console.log('🚀 ~ file: mongoController.ts:197 ~ getPendingPayments: ~ listOfTasks:', listOfTasks)
+
   
             if (listOfTasks.has(uploadId)) {
               // the uploadId exists in our task manager
-              console.log('in task turn off')
+
               // turn off the Cron job, both actually and in database
               runningTask[0].status = 'off'
               paymentProcessor.stop()
   
+              // save status in mongo
               await runningTask[0].save()
   
             }
           }
         }
         res.locals.pendingPayments = {length: countOfPending}
-        // console.log('🚀 ~ file: mongoController.ts:207 ~ getPendingPayments: ~ res.locals.pendingPayments:', res.locals.pendingPayments)
+
         return next()
       }
 
@@ -379,8 +372,7 @@ const mongoController = {
       const { type, date } = req.params
       if(type !== 'branch') return next()
   
-      // console.log('entering getBranch Funds csv exporter')
-      // console.log('Date: ', date)
+  
       const [uploadDoc]: any = await Upload.find({uploadDate: date})
       const uploadKey = uploadDoc.uploadId
   
@@ -429,7 +421,6 @@ const mongoController = {
   getPaymentsMetadata: async (req: Request, res: Response, next: NextFunction) => {
     // this middleware will take the list of payments and make a csv
     try { 
-      // console.log('entering getPaymentsMetadata csvExporter')
       // fetch date and list of payments 
       const { date } = req.params
       
@@ -455,7 +446,6 @@ const mongoController = {
 
       // create map of objects to be written as rows in csv
       const mapOfData = listOfPayments.map((ele: any) => {
-        // console.log(ele)
         return {
           employeeId: ele.empId,
           paymentSource: ele.sourceAccId,
