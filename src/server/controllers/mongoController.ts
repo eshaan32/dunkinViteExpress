@@ -1,22 +1,16 @@
 import { Request, Response, NextFunction } from 'express'
-import {  formatDate } from '../utils/helpers'
-import { Environments } from 'method-node'
-
+import fs from 'fs'
 import {createObjectCsvWriter} from 'csv-writer'
 
 import cron from 'node-cron'
-import { RateLimit } from 'async-sema'
 
 import Employee from '../models/employeeEntity'
 import Corporation from '../models/comporateEntity'
 import Branch from '../models/branchModel'
 import Upload from '../models/uploadModel'
 import Payment from '../models/paymentInfo'
-import ErroredPayment from '../models/erroredEmployee'
 
-import MethodApiClient from '../MethodApiClient'
 import Cron from '../models/cronTask'
-import { sortAndDeduplicateDiagnostics } from 'typescript'
 import ErroredEmployee from '../models/erroredEmployee'
 
 const mongoController = {
@@ -350,13 +344,23 @@ const mongoController = {
       csvWriter.writeRecords(mapOfData)
         .then(() => {
           res.download(`${path}_Sources_${date}.csv`)
-        })
 
-    } catch (err) {
-      return next({
-        log: `Error occured in mongoController.getSourceFunds middleware, ${err}`,
-        status: 400,
-        message: {err: 'An error occured while trying to query mongo for funds paid by sources to export for csv'}
+          setTimeout(() => {
+            // use fs unlick to remove the file from filesystem after 5 seconds
+            try {
+              fs.unlinkSync(`${path}_Sources_${date}.csv`)  
+
+            } catch (err) {
+              console.log(err)
+            }
+          }, 5000)
+            
+        })
+      } catch (err) {
+          return next({
+            log: `Error occured in mongoController.getSourceFunds middleware, ${err}`,
+            status: 400,
+            message: {err: 'An error occured while trying to query mongo for funds paid by sources to export for csv'}
       })
     }
   },
@@ -401,6 +405,17 @@ const mongoController = {
       csvWriter.writeRecords(mapOfData)
         .then(() => {
           res.download(`${path}_Branches_${date}.csv`)
+
+          setTimeout(() => {
+            // use fs unlick to remove the file from filesystem after 5 seconds
+            try {
+              fs.unlinkSync(`${path}_Branches_${date}.csv`)  
+
+            } catch (err) {
+              console.log(err)
+            }
+          }, 5000)
+
         })
 
     } catch (err) {
@@ -459,6 +474,17 @@ const mongoController = {
       csvWriter.writeRecords(mapOfData)
         .then(() => {
           res.download(`${path}_PaymentsAndMetadata_${date}.csv`)
+
+          setTimeout(() => {
+            // use fs unlick to remove the file from filesystem after 5 seconds
+            try {
+              fs.unlinkSync(`${path}_PaymentsAndMetadata_${date}.csv`)  
+
+            } catch (err) {
+              console.log(err)
+            }
+          }, 5000)
+          
         })
     } catch (err) {
       return next({
