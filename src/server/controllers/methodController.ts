@@ -221,7 +221,6 @@ const methodController = {
   **/
   startPaymentCronJob: async (req: Request, res: Response, next: NextFunction) => {
     try {
-      // await Cron.deleteMany({})
       const { date } = req.params
       const fDate = formatDate(date)
     

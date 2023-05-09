@@ -39,9 +39,9 @@ const FileUpload = ({ setFile, handleFileUpload, file, message, warningColor }: 
             <p className={`text-xs ${warningColor ? 'text-red-500' : 'text-grey-500'}`}>File should be of format .xml</p>
           </div>
           <form className="relative w-4/5 h-32 max-w-xs mb-14 bg-gray-100 rounded-lg shadow-inner">
-            <input type="file" id="file-upload" className="hidden" onChange={handleFileChange} />
+            <input data-testid='fileUploadInput' type="file" id="file-upload" className="hidden" onChange={handleFileChange} />
             <label htmlFor="file-upload" className="z-20 flex flex-col-reverse items-center justify-center w-full h-full cursor-pointer ">
-              <p className="z-10 text-xs font-light text-center text-gray-500">{file ? file.name : message ? message : 'Drag & Drop your files here'}</p>
+              <p data-testid='messageDisplay' className="z-10 text-xs font-light text-center text-gray-500">{file ? file.name : message ? message : 'Drag & Drop your files here'}</p>
               <svg className="z-10 w-8 h-8 r text-orange-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                 <path d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"></path>
               </svg>

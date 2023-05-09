@@ -9,6 +9,8 @@ module.exports = {
     "^.+\\.tsx?$": "ts-jest"
   },
 
+  preset: 'ts-jest',
+
   // Runs special logic, such as cleaning up components
   // when using React Testing Library and adds special
   // extended assertions to Jest

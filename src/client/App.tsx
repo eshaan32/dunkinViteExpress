@@ -14,7 +14,7 @@ import CsvExporter from './components/CsvExporter';
 import FileProcessStatusPoll from './components/FileProcessStatusPoll';
 import ErrorEmployees from './components/ErrorEmployees';
 
-function App() {
+const App = () => {
   const [message, setMessage] = useState<string>('')
   const [sDate, setsDate] = useState<string>('')
   const [showErrorOrReport, setShowErrorOrReport] = useState<string>('Report')
@@ -222,4 +222,4 @@ function App() {
   );
 }
 
-export default App;
+export default App

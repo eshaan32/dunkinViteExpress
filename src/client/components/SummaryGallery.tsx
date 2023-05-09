@@ -15,7 +15,7 @@ const SummaryGallery = ({ branches }: SummaryProp) => {
     <div className='sm:rounded-lg sm:shadow-xl pt-3'>
       <div className="overflow-y-scroll mx-3 overflow-hidden h-96 border-6 border-orange-900 grid grid-cols-2 md:grid-cols-3 gap-4">
         {branches.length > 0 && branches.map((branch: any) => (
-          <Modal key={branch.branchId} branchId={branch.branchId} employees={branch.Employees} amountPaid={branch.amountPaidCurrentBatch.amountPaid} />
+          <Modal data-testid='modal' key={branch.branchId} branchId={branch.branchId} employees={branch.Employees} amountPaid={branch.amountPaidCurrentBatch.amountPaid} />
         ))}
         {branches.length === 0 && <h2>Pizza</h2>}
       </div>

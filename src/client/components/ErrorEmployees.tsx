@@ -24,21 +24,7 @@ const ErrorEmployees = ({ sDate }: ErrorEmployeesProp) => {
   const [erroredEmployees, setErroredEmployees] = useState<Array<any>>([])
 
   useEffect(() => {
-    // const fetchData = async () => {
-    //   // console.log('sdate from useEffect in Errors', sDate)
-    //   // fetch data from reporting/getErrors endpoint, querying mongoDb errors collection
-    //   let errors = null
-    //   if (sDate === "") {
-    //     errors = await fetch('http://localhost:3000/reporting/getErrors')
-    //   } else {
-    //     errors = await fetch(`http://localhost:3000/reporting/getErrors/${sDate}`)
-    //   }
-    //   // await resolution of the promise
-    //   const errorEmployees = await errors.json()
 
-    //   // set the stateful erroredEmployees value to the resulting errorEmployees array for render
-    //   setErroredEmployees(errorEmployees)
-    // }
     fetchData()
 
 

@@ -272,7 +272,8 @@ const mongoController = {
         const countOfPending = await Payment.countDocuments({$and: [{uploadId: uploadKey}, {status: 'pending'}]})
         console.log('🚀 ~ file: mongoController.ts:273 ~ getPendingPayments: ~ countOfPending:', countOfPending)
   
-        const runningTask = await Cron.find({status: 'on'})
+        const runningTask = await Cron.find({$and: [{status: 'on'}, {batchId: uploadKey}]})
+        console.log('🚀 ~ file: mongoController.ts:276 ~ getPendingPayments: ~ runningTask:', runningTask)
         // console.log(cron.getTasks())
         if(runningTask) {
           // console.log(listOfPendingPayments.length)

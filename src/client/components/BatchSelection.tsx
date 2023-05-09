@@ -28,7 +28,7 @@ const BatchSelection = ({ paymentStart, branches, handleDateSelection, sDate }: 
     }
 
     fetchData()
-  }, [branches, sDate, paymentStart])
+  }, [branches, paymentStart])
 
   return (
     <>

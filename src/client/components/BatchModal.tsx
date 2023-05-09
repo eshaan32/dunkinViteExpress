@@ -21,12 +21,18 @@ export default function Modal({ branchId, employees, amountPaid }: ModalProp) {
   return (
     <>
       <a
+        data-testid='Modal'
         className="block max-w-sm my-2 min-h-8 p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-orange-300 dark:border-orange-800 dark:hover:bg-orange-500"
         onClick={() => setShowModal(true)}
       >
-        <h6 className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-brown-800">{branchId}</h6>
-        <p className="font-normal text-gray-700 dark:text-fuchsia-50">Employees to be Paid: {employees.length}</p>
-        <p className="font-normal text-gray-700 dark:text-fuchsia-50">Amount to Be Paid: ${amountPaid / 100}</p>
+        <h6
+          data-testid='modalBranchId'
+          className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-brown-800"
+        >
+          {branchId}
+        </h6>
+        <p data-testid='branchEmployeesPaid' className="font-normal text-gray-700 dark:text-fuchsia-50">Employees to be Paid: {employees.length}</p>
+        <p data-testid='branchAmountPaid' className="font-normal text-gray-700 dark:text-fuchsia-50">Amount to Be Paid: ${amountPaid / 100}</p>
       </a>
       {showModal ? (
         <>
@@ -36,7 +42,7 @@ export default function Modal({ branchId, employees, amountPaid }: ModalProp) {
               <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                 {/*header*/}
                 <div className="flex items-start justify-between p-5 border-b border-solid border-slate-200 rounded-t">
-                  <h3 className="text-3xl font-semibold">
+                  <h3 data-testid='modalBranchId' className="text-3xl font-semibold">
                     {branchId}
                   </h3>
                 </div>
@@ -77,15 +83,22 @@ export default function Modal({ branchId, employees, amountPaid }: ModalProp) {
                     {employees.map((emp: any, idx: number) => {
                       return (
                         <div className="tr-class" key={`employee-${idx}`}>
-                          <div className="td-class">
+                          <div
+                            data-testid='modalEmployeeName'
+                            className="td-class">
                             {emp.row.Employee.FirstName._text} {emp.row.Employee.LastName._text}
                           </div>
                           <div
-                            className="td-class">
+                            data-testid='modalEmployeeEmail'
+                            className="td-class"
+                          >
                             {emp.row.Employee.FirstName._text.toLowerCase()}.{emp.row.Employee.LastName._text.toLowerCase()}@gmail.com
                           </div>
                           <div
-                            className="td-class" contentEditable={true}>${(emp.row.Amount._text / 100).toFixed(2)}
+                            data-testid='modalEmployeeAmountPaid'
+                            className="td-class"
+                          >
+                            ${(emp.row.Amount._text / 100).toFixed(2)}
                           </div>
                         </div>
                       )

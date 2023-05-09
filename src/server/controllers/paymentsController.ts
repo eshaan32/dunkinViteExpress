@@ -16,9 +16,11 @@ import { Environments, Method } from 'method-node'
 import Business from '../models/businessEntity'
 import MethodApiClient from '../MethodApiClient'
 import { RateLimit } from 'async-sema'
+import Cron from '../models/cronTask'
 
 const paymentController = {
   preUpload: async (req: Request, res: Response, next: NextFunction) => {
+    await Cron.deleteMany({})
     await Upload.deleteMany({})
     await Business.deleteMany({})
     await Corporation.deleteMany({})
@@ -41,12 +43,12 @@ const paymentController = {
     const { data } = req.body
 
     // REMOVE THE .SLICE FOR FULL DATASET
-    res.locals.data = data.slice(0,500)
+    res.locals.data = data
 
     // generate the unique identifier
     const uploadKey = uuid4()
     // const uploadDate = (new Date().toISOString().substring(0,10))
-    const uploadDate = '2023-05-12'
+    const uploadDate = '2023-05-17'
 
     const existingFileName = await Upload.find({uploadDate: uploadDate})
 

@@ -9,7 +9,7 @@ const paymentRouter = express.Router()
  * Route to create upload and process the file data, interfacing with Mongo and then method for entity and account creation
 **/
 paymentRouter.post('/process',
-  // paymentController.preUpload,
+  paymentController.preUpload,
   paymentController.createMerchants,
   paymentController.createUpload,
   paymentController.createSummary,
